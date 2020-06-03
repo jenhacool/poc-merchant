@@ -150,6 +150,8 @@ class Test_Class_POC_Merchant extends \WP_UnitTestCase
         $this->assertSame( array( 'form-row-last' ), $fields['billing']['billing_address_1']['class'] );
         $this->assertSame( 60, $fields['billing']['billing_address_1']['priority'] );
 
+        $this->assertSame( array( 'form-row-wide' ), $fields['billing']['billing_first_name']['class'] );
+
         $this->assertTrue( ! isset( $fields['billing']['billing_country'] ) );
     }
 

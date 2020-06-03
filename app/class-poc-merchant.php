@@ -98,6 +98,8 @@ class POC_Merchant
         $fields['billing']['billing_address_1']['class'] = array( 'form-row-last' );
         $fields['billing']['billing_address_1']['priority']  = 60;
 
+        $fields['billing']['billing_first_name']['class'] = array( 'form-row-wide' );
+
         unset( $fields['billing']['billing_country'] );
 
         return $fields;
