@@ -55,6 +55,8 @@ class POC_Merchant
         add_action( 'wp_ajax_poc_merchant_product_search', array( $this->ajax, 'product_search' ) );
 
         add_action( 'wp_ajax_nopriv_poc_merchant_product_search', array( $this->ajax, 'product_search' ) );
+
+        add_action( 'woocommerce_new_order', array( $this, 'add_order_meta_data' ), 10, 2 );
     }
 
     public function modify_checkout_fields( $fields )
@@ -267,6 +269,26 @@ class POC_Merchant
         <?php
         $html = ob_get_clean();
         return $result .= $html;
+    }
+
+    public function add_order_meta_data( $order_id, $order )
+    {
+        $state = get_post_meta( $order_id, '_billing_state', true );
+
+        $city = get_post_meta( $order_id, '_billing_city', true );
+
+        $address_1 = get_post_meta( $order_id, '_billing_address_1', true );
+
+        $address_2 = get_post_meta( $order_id, '_billing_address_2', true );
+
+        $full_address = array(
+            $address_1,
+            $this->get_name_village($address_2),
+            $this->get_name_district($city),
+            $this->get_name_city($state)
+        );
+
+        update_post_meta( $order_id, 'full_address', implode( ', ', $full_address ) );
     }
 
     protected function get_name_city( $id = '' )

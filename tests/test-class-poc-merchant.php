@@ -129,6 +129,14 @@ class Test_Class_POC_Merchant extends \WP_UnitTestCase
                 array( $this->instance->ajax, 'product_search' )
             )
         );
+
+        $this->assertGreaterThan(
+            0,
+            has_action(
+                'woocommerce_new_order',
+                array( $this->instance, 'add_order_meta_data' )
+            )
+        );
     }
 
     public function test_modify_checkout_fields()
@@ -212,5 +220,24 @@ class Test_Class_POC_Merchant extends \WP_UnitTestCase
         $variation_product = WC_Helper_Product::create_variation_product();
 
         $this->assertSame( $variation_product->get_children()[0], $this->instance->set_default_variation_id( $variation_product->get_id() ) );
+    }
+
+    public function test_add_order_meta_data()
+    {
+        $order = wc_create_order();
+
+        update_post_meta( $order->get_id(), '_billing_state', 'HANOI' );
+
+        update_post_meta( $order->get_id(), '_billing_city', '1' );
+
+        update_post_meta( $order->get_id(), '_billing_address_1', 'Số nhà 1' );
+
+        update_post_meta( $order->get_id(), '_billing_address_2', '1' );
+
+        $this->instance->add_order_meta_data( $order->get_id(), $order );
+
+        $full_address = get_post_meta( $order->get_id(), 'full_address', true );
+
+        $this->assertSame( 'Số nhà 1, Phường Hàng Buồm, Quận Hoàn Kiếm, Hà Nội', $full_address );
     }
 }
