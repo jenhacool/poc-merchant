@@ -6,6 +6,9 @@ use App\Utilities\Helpers;
 
 class POC_Merchant_AJAX
 {
+	/**
+	 * Handle load address AJAX request
+	 */
     public function load_address()
     {
         $matp = isset( $_POST['matp'] ) ? wc_clean( wp_unslash( $_POST['matp'] ) ) : '';
@@ -27,6 +30,11 @@ class POC_Merchant_AJAX
         die();
     }
 
+	/**
+	 * Handle update cart on checkout page AJAX request
+	 *
+	 * @throws \Exception
+	 */
     public function update_cart_on_checkout()
     {
         $form_data = array();
@@ -58,6 +66,9 @@ class POC_Merchant_AJAX
         wp_send_json_success();
     }
 
+	/**
+	 * Handle product search AJAX request
+	 */
     public function product_search()
     {
         $args = array(
@@ -86,6 +97,13 @@ class POC_Merchant_AJAX
         wp_send_json_success( $products );
     }
 
+	/**
+	 * Get list district by city
+	 *
+	 * @param string $matp
+	 *
+	 * @return array|bool
+	 */
     protected function get_list_district($matp = ''){
         if( ! $matp ) {
             return false;
@@ -102,6 +120,13 @@ class POC_Merchant_AJAX
         return Helpers::search_in_array( $quan_huyen, 'matp', $matp );
     }
 
+	/**
+	 * Get list village by district
+	 *
+	 * @param string $maqh
+	 *
+	 * @return array|bool
+	 */
     protected function get_list_village($maqh = ''){
         if( ! $maqh ) {
             return false;

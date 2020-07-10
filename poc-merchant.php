@@ -18,10 +18,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 use App\POC_Merchant;
 
 // Register activation hook
-register_activation_hook( POC_MERCHANT_PLUGIN_FILE, array( 'POC_Merchant', 'activate' ) );
+register_activation_hook( POC_MERCHANT_PLUGIN_FILE, array( POC_Merchant::class, 'activate' ) );
 
 // Register deactivation hook
-register_deactivation_hook( POC_MERCHANT_PLUGIN_FILE, array( 'POC_Merchant', 'deactivate' ) );
+register_deactivation_hook( POC_MERCHANT_PLUGIN_FILE, array( POC_Merchant::class, 'deactivate' ) );
 
 // Run plugin
 POC_Merchant::instance();

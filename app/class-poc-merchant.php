@@ -11,6 +11,9 @@ class POC_Merchant
 
     public $ajax;
 
+	/**
+	 * POC_Merchant constructor.
+	 */
     protected function __construct()
     {
         $this->init_classes();
@@ -18,6 +21,9 @@ class POC_Merchant
         $this->add_hooks();
     }
 
+	/**
+	 * Init classes
+	 */
     protected function init_classes()
     {
         $this->ajax = new POC_Merchant_AJAX();
@@ -59,6 +65,13 @@ class POC_Merchant
         add_action( 'woocommerce_new_order', array( $this, 'add_order_meta_data' ), 10, 2 );
     }
 
+	/**
+     * Modify checkout fields. Add custom city, district, ward selection
+     *
+	 * @param $fields
+	 *
+	 * @return mixed
+	 */
     public function modify_checkout_fields( $fields )
     {
         require_once POC_MERCHANT_PLUGIN_DIR . '/assets/data/tinh_thanhpho.php';
@@ -184,11 +197,24 @@ class POC_Merchant
         return $billing_address;
     }
 
+	/**
+     * Set default checkout country to VN
+     *
+	 * @return string
+	 */
     public function set_default_checkout_country()
     {
         return 'VN';
     }
 
+	/**
+     * Custom format order address
+     *
+	 * @param $value
+	 * @param $type
+	 *
+	 * @return mixed
+	 */
     public function get_order_address( $value, $type )
     {
         if($type == 'billing' || $type == 'shipping'){
@@ -233,6 +259,15 @@ class POC_Merchant
         return $product->get_children()[0];
     }
 
+	/**
+     * Modify cart item quantity
+     *
+	 * @param $result
+	 * @param $cart_item
+	 * @param $cart_item_key
+	 *
+	 * @return string
+	 */
     public function modify_cart_item_quantity( $result, $cart_item, $cart_item_key )
     {
         ob_start(); ?>
@@ -271,6 +306,12 @@ class POC_Merchant
         return $result .= $html;
     }
 
+	/**
+     * Add extra order meta data
+     *
+	 * @param $order_id
+	 * @param $order
+	 */
     public function add_order_meta_data( $order_id, $order )
     {
         $state = get_post_meta( $order_id, '_billing_state', true );
@@ -291,6 +332,13 @@ class POC_Merchant
         update_post_meta( $order_id, 'full_address', implode( ', ', $full_address ) );
     }
 
+	/**
+     * Get city's name by id
+     *
+	 * @param string $id
+	 *
+	 * @return mixed|string
+	 */
     protected function get_name_city( $id = '' )
     {
         include POC_MERCHANT_PLUGIN_DIR . '/assets/data/tinh_thanhpho.php';
@@ -307,6 +355,13 @@ class POC_Merchant
         return ( isset( $tinh_thanhpho[$id_tinh] ) ) ? $tinh_thanhpho[$id_tinh] : '';
     }
 
+	/**
+     * Get district's name by id
+     *
+	 * @param string $id
+	 *
+	 * @return bool|mixed|string
+	 */
     protected function get_name_district($id = ''){
         include POC_MERCHANT_PLUGIN_DIR . '/assets/data/quan_huyen.php';
 
@@ -320,6 +375,13 @@ class POC_Merchant
         return false;
     }
 
+	/**
+     * Get village name by id
+     *
+	 * @param string $id
+	 *
+	 * @return bool|mixed|string
+	 */
     protected function get_name_village($id = ''){
         include POC_MERCHANT_PLUGIN_DIR . '/assets/data/xa_phuong_thitran.php';
 
